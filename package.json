@@ -1,0 +1,33 @@
+{
+  "name": "xstocks-dca-agent",
+  "version": "0.1.0",
+  "description": "Reference TypeScript agent: halt-gated DCA into Kraken/Backed xStocks on Solana via Jupiter, gated by Headless Oracle signed market-state attestation.",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "xstocks-dca-agent": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node --enable-source-maps dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@headlessoracle/verify": "^1.0.0",
+    "@solana/web3.js": "^1.95.0",
+    "bs58": "^6.0.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.1.0"
+  }
+}
