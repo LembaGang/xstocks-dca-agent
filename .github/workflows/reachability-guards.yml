@@ -1,3 +1,18 @@
+# Reachability guards for dismissed Dependabot alerts.
+#
+# Each job below corresponds to ONE Dependabot alert dismissed as
+# `tolerable_risk`. The job fails the build if the reachability invariant that
+# justified the dismissal ever stops holding — converting the dismissal from a
+# point-in-time UI comment into an enforced CI invariant.
+#
+# Convention and worked example: see SECURITY.md
+# ("Dependabot dismissals require a reachability guard").
+#
+# To add a new guard: copy an existing job, rename it for the invariant, put
+# the alert number and GHSA ID in the leading comment, and make the step's
+# failure message tell a future contributor exactly which dismissal will
+# break and where to re-evaluate it.
+
 name: reachability-guards
 
 on:
@@ -6,6 +21,9 @@ on:
     branches: [main]
 
 jobs:
+  # Alert #3 — uuid (GHSA-w5hq-g745-h8pq) — dismissed because src/ does not
+  # import uuid; the vuln requires passing a `buf` argument to v3/v5/v6, which
+  # is not reachable through jayson's v4 random-id usage under @solana/web3.js.
   uuid-not-imported-in-src:
     runs-on: ubuntu-latest
     steps:
