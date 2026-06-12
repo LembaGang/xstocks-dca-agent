@@ -223,8 +223,7 @@ which provides the signed market-state attestation that makes this whole
 pattern possible. The HO SDK is `@headlessoracle/verify` on npm.
 
 The Jupiter integration shape and the soft/strict halt-gate policy mirror the
-Rust `rwa_cli` agent (Ondo Global Markets rail). xStocks are issued by
-[Backed Finance](https://backed.fi).
+Rust `rwa_cli` agent. xStocks are issued by [Backed Finance](https://backed.fi).
 
 ## License
 
