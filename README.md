@@ -1,6 +1,6 @@
 # xstocks-dca-agent
 
-A small, **reference** TypeScript agent that DCAs into Kraken/Backed xStocks on
+A small, **reference** TypeScript agent that DCAs into Backed xStocks on
 Solana via Jupiter — **only when the underlying US market is verifiably open**,
 per a [Headless Oracle](https://headlessoracle.com) Ed25519-signed market-state
 receipt.
@@ -25,6 +25,24 @@ because nothing on Solana knows that the real TSLA is paused.
 The Headless Oracle gate is the only credible source of underlying session
 state available to an on-chain consumer. This agent verifies a signed receipt
 before every swap and refuses if the market is not OPEN.
+
+---
+
+## Proof: a real halt-gated buy on mainnet
+
+This is not a thought experiment. On 2026-06-09, this agent executed a real,
+halt-gated buy on Solana mainnet:
+
+1. It fetched a Headless Oracle receipt for **XNAS**, verified the Ed25519
+   signature locally, and confirmed `status: "OPEN"` (fresh, not downgraded).
+2. Only then did it swap **1 USDC → TSLAx** via Jupiter.
+
+**Transaction:** [`4cBbdV35geri7nj5DhzEsr2BxNmpDjDjkXosMHdpF4KFMAUDuMnSgMu63XzVHXmE2khQi8ZU512nJbJZDVU3oavk`](https://solscan.io/tx/4cBbdV35geri7nj5DhzEsr2BxNmpDjDjkXosMHdpF4KFMAUDuMnSgMu63XzVHXmE2khQi8ZU512nJbJZDVU3oavk) — FINALIZED.
+
+The receipt verified `OPEN` and was **not** downgraded; the swap executed against
+that signed attestation. Anyone can confirm the on-chain side at the link above.
+The agent has been `DRY_RUN=true` since — this repo ships safed; flip the flag
+deliberately, with a dedicated wallet, to run live.
 
 ---
 
@@ -163,8 +181,10 @@ real-attestation ticks apart from soft-passed ones.
 
 ## Mint registry
 
-Mints used by this agent (verified 2026-06-08 against Solscan + Solflare +
-exchange listing pages; all carry Backed's vanity `Xs` prefix):
+Mints used by this agent (re-verified 2026-06-12 directly on-chain via
+Token-2022 `tokenMetadata` extension — each mint's embedded symbol matches the
+table below and each metadata URI is hosted at `xstocks-metadata.backed.fi`;
+all carry Backed's vanity `Xs` prefix):
 
 | Symbol | Underlying | Mint |
 |--------|------------|------|
