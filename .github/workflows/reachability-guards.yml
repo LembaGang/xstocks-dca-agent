@@ -1,0 +1,20 @@
+name: reachability-guards
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  uuid-not-imported-in-src:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fail if src/ imports uuid
+        run: |
+          if grep -rEn "(from ['\"]uuid['\"]|require\(['\"]uuid['\"]\))" src/; then
+            echo "::error::src/ now imports uuid directly. Dependabot alert #3 (uuid buf-bounds CVE, GHSA-w5hq-g745-h8pq) was dismissed as unreachable on the basis that src/ does not use uuid — only jayson uses it transitively, generating v4 random request IDs with no buf argument. That assumption no longer holds. Re-evaluate the dismissal at https://github.com/LembaGang/xstocks-dca-agent/security/dependabot/3 before merging: either remove the uuid import, audit the new call site for buf-argument exposure to v3/v5/v6, or reopen the alert and bump uuid."
+            exit 1
+          fi
+          echo "OK: src/ does not import uuid; alert #3 reachability assumption still holds."
